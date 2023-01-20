@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="/static/play_vs_api/css/game_snippet.css">
+
+<table class="match-snippet table" onclick="location.href='/pvsdata/game/{{ game['winningTeamId'] }}/{{ game['gameId'] }}';" style="cursor: pointer;">
+    <col style="width:40%">
+	<col style="width:10%">
+	<col style="width:10%">
+	<col style="width:40%">
+    <thead>
+        <tr>
+            <th colspan="4">Game #{{ game['ordinalNumber'] }} is {{ game['status'] }}
+                <span data-toggle="tooltip" data-placement="top" title="{{ game | safe }}">✪</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% if game['teamGameStats'] == [] %}
+                <th colspan="1" title="{{ game['winningTeamName'] }}">
+                    <a href="/pvsdata/team/{{ game['winningTeamId'] }}" class="victory">{{ game['winningTeamName'] }}</a>
+                </th>
+                <th colspan="2">VS</th>
+                <th colspan="1" title="{{ game['losingTeamName'] }}">
+                    <a href="/pvsdata/team/{{ game['losingTeamId'] }}" class="defeat">{{ game['losingTeamName'] }}</a>
+                </th>
+            {% else %}
+                <th colspan="1" title="{{ game['teamGameStats'][0]['teamName'] }}">
+                    <a href="/pvsdata/team/{{ game['teamGameStats'][0]['teamId'] }}" class="{% if game['teamGameStats'][0]['teamId'] == game['winningTeamId'] %}victory{% else %}defeat{% endif %}">{{ game['teamGameStats'][0]['teamName'] }}</a>
+                </th>
+                <th colspan="2">VS</th>
+                <th colspan="1" title="{{ game['teamGameStats'][1]['teamName'] }}">
+                    <a href="/pvsdata/team/{{ game['teamGameStats'][1]['teamId'] }}" class="{% if game['teamGameStats'][1]['teamId'] == game['winningTeamId'] %}victory{% else %}defeat{% endif %}">{{ game['teamGameStats'][1]['teamName'] }}</a>
+                </th>
+            {% endif %}
+        </tr>
+        {% if game['teamGameStats'] == [] %}
+            <tr>
+                <th colspan="4">There is no data for this match :/</th>
+            </tr>
+        {% else %}
+            {% for row in zip_fill_none(game['teamGameStats'][0]['readdedPlayerGameStats'], game['teamGameStats'][1]['readdedPlayerGameStats']) %}
+                <tr>
+                    <th colspan="1">{{ row[0]["riotId"] }}</th>
+
+                    <th colspan="1"><span class="champimg-snippet-icon">
+                        <img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(row[0]['championId'])] }}.png" alt="">
+                    </span></th>
+                    <th colspan="1"><span class="champimg-snippet-icon">
+                        <img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(row[1]['championId'])] }}.png" alt="">
+                    </span></th>
+                    
+                    
+                    <th colspan="1">{{ row[1]["riotId"] }}</th>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        
+        
+    </tbody>
+</table>

@@ -1,0 +1,62 @@
+<H1 style="font-size: 3rem">Pick bans stuff</H1>
+
+<input onchange="update_pbc()" type="radio" class="btn-check" id="btn-ally-picks" name="pb-radio" autocomplete="off" checked>
+<label class="btn btn-outline-primary" for="btn-ally-picks">Ally Picks</label>
+<input onchange="update_pbc()" type="radio" class="btn-check" id="btn-enemy-bans" name="pb-radio" autocomplete="off">
+<label class="btn btn-outline-primary" for="btn-enemy-bans">Enemy Bans</label>
+<br style="display: block; margin-top: 3px;">
+<input onchange="update_pbc()" type="radio" class="btn-check" id="btn-enemy-picks" name="pb-radio" autocomplete="off">
+<label class="btn btn-outline-primary" for="btn-enemy-picks">Enemy Picks</label>
+<input onchange="update_pbc()" type="radio" class="btn-check" id="btn-ally-bans" name="pb-radio" autocomplete="off">
+<label class="btn btn-outline-primary" for="btn-ally-bans">Ally Bans</label>
+
+<br><br>
+
+<ul class="list-group" id="pb-list">
+</ul>
+<script>
+	champion_json = {{ ChampKey | safe }}
+
+	picks_json = {{ mpc['AllyPicks'] | safe }}
+	e_picks_json = {{ mpc['EnemyPicks'] | safe }}
+	bans_json = {{ mpc['AllyBans'] | safe }}
+	e_bans_json = {{ mpc['EnemyBans'] | safe }}
+
+	function update_pbc() {
+		$("#pb-list").empty()
+
+		dict_to_use = {}
+		if ($("#btn-ally-picks").prop('checked')) {
+			dict_to_use = picks_json
+		}
+		if ($("#btn-enemy-bans").prop('checked')) {
+			dict_to_use = e_bans_json
+		}
+		if ($("#btn-enemy-picks").prop('checked')) {
+			dict_to_use = e_picks_json
+		}
+		if ($("#btn-ally-bans").prop('checked')) {
+			dict_to_use = bans_json
+		}
+		
+		let keyValues = []
+
+		for (const key in dict_to_use) {
+			keyValues.push([ key, dict_to_use[key] ])
+		}
+
+		keyValues.sort(function compare(kv1, kv2) {
+			return kv2[1] - kv1[1]
+		})
+		console.log(keyValues)
+		for (let kv in keyValues) {
+			kv = keyValues[kv]
+			console.log(kv)
+			$("#pb-list").append($("<li class=\"list-group-item\">"+champion_json[kv[0]]+" "+kv[1]+"</li>"))
+		}
+	}
+
+	update_pbc()
+</script>
+
+

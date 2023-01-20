@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="/static/play_vs_api/css/game_snippet.css">
+	<link rel="stylesheet" href="https://lolg-cdn.porofessor.gg/style.sprite.css?v=d8cb20dbba46bd2feb99e8edf13a0d2e">
+	<link rel="stylesheet" href="/static/play_vs_api/css/games_css_table.css">
+	
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@500&display=swap" rel="stylesheet"> 
+
+
+	<title>Document</title>
+
+</head>
+<body>
+
+<div class="text-center container-xl">
+	<br><br><br>
+	{% if gameData['teamGameStats'] == [] %}
+		<h1>There is no game data for this match :/</h1>
+	{% else %}
+
+	<h2>Match Details</h2>
+	<h5><span>Week {{ gameData['matchWeek'] }} ∙ Game {{ gameData['ordinalNumber'] }} ∙ {{ gameData["teamGameStats"][0]['timePlayedClockDisplay'] }}</span></h5>
+
+	<div class="evenly-space best-container container-center">
+		{% set record_player = all_players[get_largest_key_from_list_of_dicts(all_players, "creepScore")] %}
+		<div class="col best-player highest-cs" style="  background-image: linear-gradient(270deg, rgba(46, 34, 105, 0.5) 0%, rgb(19, 14, 57) 100%), url('{{ ddragon_base_url }}/img/champion/splash/{{ ChampKey[str(record_player['championId'])] }}_0.jpg');">
+			<div class="best-player-title">Highest CS</div>
+			<div class="best-player-stat">{{ "{:,}".format(record_player['creepScore']).replace(",", " ") }}</div>
+			<div class="best-player-id">
+				<img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(record_player['championId'])] }}.png"  class="best-player-icon" width="16" height="16">
+				<span class="best-player-name">{{ record_player['riotId'] }}</span>
+			</div>
+		</div>
+
+		{% set record_player = all_players[get_largest_key_from_list_of_dicts(all_players, "championDamageDealt")] %}
+		<div class="col best-player highest-dmg" style="background-image: linear-gradient(270deg, rgba(46, 34, 105, 0.5) 0%, rgb(19, 14, 57) 100%), url('{{ ddragon_base_url }}/img/champion/splash/{{ ChampKey[str(record_player['championId'])] }}_0.jpg');">
+			<div class="best-player-title">Best DMG</div>
+			<div class="best-player-stat">{{ "{:,}".format(record_player['championDamageDealt']).replace(",", " ") }}</div>
+			<div class="best-player-id">
+				<img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(record_player['championId'])] }}.png"  class="best-player-icon" width="16" height="16">
+				<span class="best-player-name">{{ record_player['riotId'] }}</span>
+			</div>
+		</div>
+
+		{% set record_player = all_players[get_largest_key_from_list_of_dicts(all_players, "eliminationParticipation")] %}
+		<div class="col best-player highest-kp" style="background-image: linear-gradient(270deg, rgba(46, 34, 105, 0.5) 0%, rgb(19, 14, 57) 100%), url('{{ ddragon_base_url }}/img/champion/splash/{{ ChampKey[str(record_player['championId'])] }}_0.jpg');">
+			<div class="best-player-title">Best KP</div>
+			<div class="best-player-stat">{{ round(record_player['eliminationParticipation']*100) }}%</div>
+			<div class="best-player-id">
+				<img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(record_player['championId'])] }}.png"  class="best-player-icon" width="16" height="16">
+				<span class="best-player-name">{{ record_player['riotId'] }}</span>
+			</div>
+		</div>
+
+		{% set record_player = all_players[get_largest_key_from_list_of_dicts(all_players, "goldEarned")] %}
+		<div class="col best-player highest-gold" style="background-image: linear-gradient(270deg, rgba(46, 34, 105, 0.5) 0%, rgb(19, 14, 57) 100%), url('{{ ddragon_base_url }}/img/champion/splash/{{ ChampKey[str(record_player['championId'])] }}_0.jpg');">
+			<div class="best-player-title">Most Gold</div>
+			<div class="best-player-stat">{{ "{:,}".format(record_player['goldEarned']).replace(",", " ") }}</div>
+			<div class="best-player-id">
+				<img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(record_player['championId'])] }}.png"  class="best-player-icon" width="16" height="16">
+				<span class="best-player-name">{{ record_player['riotId'] }}</span>
+			</div>
+		</div>
+
+		{% set record_player = all_players[get_largest_key_from_list_of_dicts(all_players, "eliminationRespawnRatio")] %}
+		<div class="col best-player highest-kp" style="background-image: linear-gradient(270deg, rgba(46, 34, 105, 0.5) 0%, rgb(19, 14, 57) 100%), url('{{ ddragon_base_url }}/img/champion/splash/{{ ChampKey[str(record_player['championId'])] }}_0.jpg');">
+			<div class="best-player-title">Best KDA</div>
+			<div class="best-player-stat">{{ "{:.1f}".format(record_player['eliminationRespawnRatio']).replace(",", " ") }}</div>
+			<div class="best-player-id">
+				<img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(record_player['championId'])] }}.png"  class="best-player-icon" width="16" height="16">
+				<span class="best-player-name">{{ record_player['riotId'] }}</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="matchDetails">
+		<div class="box matchBox container-center">
+			<table class="data_table matchTable container-center">
+				<thead>
+						<th>
+							<a href="/pvsdata/team/{{ gameData['teamGameStats'][0]['teamId'] }}">
+								<span class="teamName">{{ gameData['teamGameStats'][0]['teamName'] }}</span>
+								<br>
+								{% if gameData['teamGameStats'][0]['teamId'] == gameData['winningTeamId'] %}
+									<span class="victory">Victory</span>
+								{% elif gameData['teamGameStats'][0]['teamId'] == gameData['losingTeamId'] %}
+									<span class="defeat">Defeat</span>
+								{% endif %}
+							</a>
+						 </th>
+						 <th>
+							<span class="kills">{{ gameData['teamGameStats'][0]['eliminations'] }}</span> /
+							<span class="deaths">{{ gameData['teamGameStats'][0]['respawns'] }}</span> /
+							<span class="assists">{{ gameData['teamGameStats'][0]['assists'] }}</span>
+						</th>
+						<th>
+							{{ "{0:.1f}".format(gameData['teamGameStats'][0]['goldEarned'] / 1000) }}k ⛁
+						</th>
+						<th>
+							⛁ {{ "{0:.1f}".format(gameData['teamGameStats'][1]['goldEarned'] / 1000) }}k
+						</th>
+						<th>
+							<span class="kills">{{ gameData['teamGameStats'][1]['eliminations'] }}</span> /
+							<span class="deaths">{{ gameData['teamGameStats'][1]['respawns'] }}</span> /
+							<span class="assists">{{ gameData['teamGameStats'][1]['assists'] }}</span>
+						</th>
+			
+						<th>
+							<a href="/pvsdata/team/{{ gameData['teamGameStats'][1]['teamId'] }}">
+								<span class="teamName">{{ gameData['teamGameStats'][1]['teamName'] }}</span>
+								<br>
+								{% if gameData['teamGameStats'][1]['teamId'] == gameData['winningTeamId'] %}
+									<span class="victory">Victory</span>
+								{% elif gameData['teamGameStats'][1]['teamId'] == gameData['losingTeamId'] %}
+									<span class="defeat">Defeat</span>
+								{% endif %}
+							</a>
+						 </th>
+
+				</thead>
+				  <tbody>					
+					{% for row in zip_fill_none(gameData['teamGameStats'][0]['readdedPlayerGameStats'], gameData['teamGameStats'][1]['readdedPlayerGameStats']) %}
+	
+					  <tr class="playerRow">
+						  <td class="text-left summoner_column">
+							  <div class="img-align-block">
+								<div class="relative">
+									<a href="https://u.gg/lol/profile/na1/{{ row[0]['riotId'] }}/overview">
+										<div>
+											<img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(row[0]['championId'])] }}.png"  class="champion" width="48" height="48">
+										</div>
+									  </a>
+								</div>
+								<div class="txt">
+									<a href="https://u.gg/lol/profile/na1/{{ row[0]['riotId'] }}/overview">
+										<div class="name">
+											{{ row[0]['riotId'] }} 
+										</div>
+										  <div class="subname">
+											<i>
+												{{ mlp[row[0]['riotId']]['tier'] }} {{ mlp[row[0]['riotId']]['rank'] }}
+											</i>
+										  </div>
+									  </a>
+								  </div>
+							  </div>
+						</td>
+						<td class="kdaColumn  requireTooltip noCursor">
+				
+							<div class="kda ">
+								<span class="kills">{{ row[0]['eliminations'] }}</span> /
+								<span class="deaths">{{ row[0]['respawns'] }}</span> /
+								<span class="assists">{{ row[0]['assists'] }}</span>
+							</div>
+				
+							<div class="cs">
+								{{ row[0]['creepScore'] }} CS
+								<br>
+								{{ "{0:.1f}".format(row[0]['goldEarned'] / 1000) }}k ⛁
+							</div>
+				
+						</td>
+						<td class="itemsColumn itemsColumn-100">
+							<div>
+								{% if row[0]['items'][0] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[0]['items'][0]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[0]['items'][1] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[0]['items'][1]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[0]['items'][2] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[0]['items'][2]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[0]['items'][6] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[0]['items'][6]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+							</div>
+							<div>
+								{% if row[0]['items'][3] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[0]['items'][3]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[0]['items'][4] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[0]['items'][4]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[0]['items'][5] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[0]['items'][5]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+							
+							</div>
+						</td>
+						<td class="itemsColumn itemsColumn-200">
+							<div>
+								{% if row[1]['items'][6] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[1]['items'][6]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[1]['items'][0] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[1]['items'][0]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[1]['items'][1] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[1]['items'][1]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[1]['items'][2] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[1]['items'][2]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+							</div>
+							<div>
+								{% if row[1]['items'][3] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[1]['items'][3]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[1]['items'][4] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[1]['items'][4]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+								{% if row[1]['items'][5] != 0 %}<img src="{{ddragon_patch_url}}/img/item/{{row[1]['items'][5]}}.png" width="24" height="24">{%else%}<div class="emptyItem show-for-dark-only"></div>{%endif%}
+							
+							</div>
+						</td>
+						<td class="kdaColumn  requireTooltip noCursor">
+				
+							<div class="kda ">
+								<span class="kills">{{ row[1]['eliminations'] }}</span> /
+								<span class="deaths">{{ row[1]['respawns'] }}</span> /
+								<span class="assists">{{ row[1]['assists'] }}</span>
+							</div>
+				
+							<div class="cs">
+								{{ row[1]['creepScore'] }} CS
+								<br>
+								{{ "{0:.1f}".format(row[1]['goldEarned'] / 1000) }}k ⛁
+							</div>
+				
+						</td>
+						<td class="text-right  summoner_column">
+							<div class="img-align-block-right">
+								<div class="relative">
+									<a href="https://u.gg/lol/profile/na1/{{ row[1]['riotId'] }}/overview">
+										<div>
+										  <img src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(row[1]['championId'])] }}.png" class="champion" width="48" height="48">
+										</div>
+									  </a>
+								</div>
+								<div class="txt">
+									<a href="https://u.gg/lol/profile/na1/{{ row[1]['riotId'] }}/overview">
+										<div class="name">
+											{{ row[1]['riotId'] }} 
+										</div>
+										  <div class="subname">
+											<i>
+												{{ mlp[row[1]['riotId']]['tier'] }} {{ mlp[row[1]['riotId']]['rank'] }}
+											</i>
+										  </div>
+									  </a>
+								  </div>
+							  </div>
+						</td>
+					</tr>					
+					{% endfor %}
+					<tr>
+						<td class="bans">
+							{% for ban in gameData['teamGameStats'][0]["teamBans"] %}
+								<span class="banned-shaddow">
+									<span class="banned-span">
+										<img class="banned-icon" src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(ban)] }}.png" class="champion" width="24" height="24">
+									</span>
+								</span>
+							{% endfor %}
+						</td>
+						<td class="objectives" colspan="2">
+							<img src="/static/play_vs_api/media/tower.svg" height="20" alt="">
+							<span>{{ gameData['teamGameStats'][0]["towersDestroyed"] }}</span>
+							<img src="/static/play_vs_api/media/inhibitor.svg" height="20" alt="">
+							<span>{{ gameData['teamGameStats'][0]["inhibitorsDestroyed"] }}</span>
+							<img src="/static/play_vs_api/media/baron-nashor.svg" height="20" alt="">
+							<span>{{ gameData['teamGameStats'][0]["baronEliminations"] }}</span>
+							<img src="/static/play_vs_api/media/dragons.svg" height="20" alt="">
+							<span>{{ gameData['teamGameStats'][0]["dragonEliminations"] }}</span>
+						</td>
+
+						<td class="objectives" colspan="2">
+							<img src="/static/play_vs_api/media/tower.svg" height="20" alt="">
+							<span>{{ gameData['teamGameStats'][0]["towersDestroyed"] }}</span>
+							<img src="/static/play_vs_api/media/inhibitor.svg" height="20" alt="">
+							<span>{{ gameData['teamGameStats'][0]["inhibitorsDestroyed"] }}</span>
+							<img src="/static/play_vs_api/media/baron-nashor.svg" height="20" alt="">
+							<span>{{ gameData['teamGameStats'][0]["baronEliminations"] }}</span>
+							<img src="/static/play_vs_api/media/dragons.svg" height="20" alt="">
+							<span>{{ gameData['teamGameStats'][0]["dragonEliminations"] }}</span>
+						</td>
+						
+						<td class="bans">
+							{% for ban in gameData['teamGameStats'][0]["teamBans"] %}
+								<span class="banned-shaddow">
+									<span class="banned-span">
+										<img class="banned-icon" src="{{ ddragon_patch_url }}/img/champion/{{ ChampKey[str(ban)] }}.png" class="champion" width="24" height="24">
+									</span>
+								</span>
+							{% endfor %}
+						</td>
+	
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		{% endif %}
+	
+	</div>
+</div>
+
+<br><br><br><br><br><br><br><br><br><br>
+
+
+<script>
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>
+
+</body>
+</html>

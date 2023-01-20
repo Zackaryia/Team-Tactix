@@ -1,0 +1,30 @@
+
+
+<table id="players" class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Img</th>
+            <th>RiotID</th>
+            <th>KDA</th>
+            <th>GPM</th>
+            <th>Wards</th>
+            <th>CS</th>
+            <th>Time played</th>
+            <th>Games played with data</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in memberAvgStats %}
+            <tr>
+                <td><img src="{{player['avatarUrl']}}" alt="" width="32px" height="32px" style="padding:0%;"></td>
+                <td class="player-name" data-team-id="{{ player['playerId'] }}"><a href="https://u.gg/lol/profile/na1/{{ player['riotId'] }}/overview">{{ player['riotId'] }}</a></td>
+                <td>{{ player['averageEliminations'] }}/{{ player['averageRespawns'] }}/{{ player['averageAssists'] }}</td>
+                <td>{{ player['averageGoldPerMinute'] }}</td>
+                <td>{% if player['goldEarned'] == None or player['goldEarned'] == 0 %}None{%else%}{{ "{:.1f}".format(player['wardsPlaced'] / (player['goldEarned']/player['averageGoldEarned'])) }}/{{ player['averageWardsDestroyed'] }}{%endif%}</td>
+                <td>{{ player['averageCreepScore'] }}</td>
+                <td>{{ player['timePlayedInSeconds'] }}</td>
+                <td>{% if player['goldEarned'] == None or player['goldEarned'] == 0 %}None{%else%}{{ round(player['goldEarned']/player['averageGoldEarned']) }}{%endif%}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

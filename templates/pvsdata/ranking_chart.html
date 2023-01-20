@@ -1,0 +1,44 @@
+
+{% extends "pvs_base.html" %}
+
+{% block main %}
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item" role="presentation">
+			<button class="nav-link active btn-lg" id="team-ranking-tab" data-bs-toggle="tab" data-bs-target="#team-ranking" type="button" role="tab" aria-controls="team-ranking" aria-selected="true">Team Ranking</button>
+		</li>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link btn-lg" id="players-tab" data-bs-toggle="tab" data-bs-target="#players" type="button" role="tab" aria-controls="players" aria-selected="false">Players</button>
+		</li>
+	</ul>
+
+	<div class="tab-content" id="myTabContent">
+		<div class="tab-pane fade show active" id="team-ranking" role="tabpanel" aria-labelledby="team-ranking-tab">
+			<table id="ranking" class="table table-striped table-bordered">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Team Name</th>
+						<th scope="col">Matches Record</th>
+						<th scope="col">PlayVS Score</th>
+						<th scope="col">Game Record</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for team in rankings %}
+						<tr>
+							<th>{{ team.rankNumber }}</th>
+							<td class="team-name" data-team-id="{{ team.teamId }}"><a href="/pvsdata/team/{{team.teamId}}">{{ team.teamName }}</a></td>
+							<td>{{ team.matchesWon }}-{{ team.matchesLost }}</td>
+							<td>{{ team.PVSRankingScore }}</td>
+							<td>{{ team.gamesWon }}-{{ team.gamesLost }}</td>
+						</tr>
+					{% endfor %}
+
+				</tbody>
+			</table>
+		</div>
+		<div class="tab-pane fade" id="players" role="tabpanel" aria-labelledby="players-tab">
+			{% include 'includes/player_table.html' %}
+		</div>
+	</div>
+{% endblock main %}

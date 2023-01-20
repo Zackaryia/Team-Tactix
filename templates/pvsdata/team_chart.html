@@ -1,0 +1,37 @@
+{% extends "pvs_base.html" %}
+
+{% block main %}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+	<li class="nav-item" role="presentation">
+		<button class="nav-link active btn-lg" id="team-games-tab" data-bs-toggle="tab" data-bs-target="#team-games" type="button" role="tab" aria-controls="team-games" aria-selected="true">Team Games</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link btn-lg" id="players-tab" data-bs-toggle="tab" data-bs-target="#players" type="button" role="tab" aria-controls="players" aria-selected="false">Players</button>
+	</li>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+	<div class="tab-pane fade show active" id="team-games" role="tabpanel" aria-labelledby="team-games-tab">
+		<h1>Games</h1>
+
+		<style>
+			.game {
+				background-color:darkgrey;
+				border: 1px solid black;
+			}
+		</style>
+		
+		{% for game in teamData['games'] %}
+
+			{% include 'includes/game_snippet.html' %}
+    		
+		{% endfor %}
+
+	</div>
+	<div class="tab-pane fade" id="players" role="tabpanel" aria-labelledby="players-tab">
+		{% set memberAvgStats = teamData['memberAvgStats'] %}
+		{% include 'includes/player_table.html' %}
+	<div>
+</div>
+{% endblock main %}
