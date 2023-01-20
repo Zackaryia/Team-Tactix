@@ -1,4 +1,8 @@
+# Team Tactix
+
 This repository contains a Python-based GraphQL scraper that pulls data from an API and restructures it into JSON files. The data is then visualized on a Flask web server to display match statistics and additional information from various APIs. The tool was developed to help my esports league team scout our opponents, but can be adapted for other use cases as well. 
+
+**NOTE: All possibly senative data or sensative data gathering scripts have been removed.**
 
 ![Screenshot of a game that was played](/screenshots/Screenshot%20from%202023-01-19%2023-59-36.png)
 ![Screenshot of the team's match history and pick history](/screenshots/Screenshot%20from%202023-01-19%2023-58-13.png)
